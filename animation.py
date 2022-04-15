@@ -1,3 +1,4 @@
+# Adapted from http://blog.nugroho.xyz/2015/11/3d-animation-of-2d-diffusion-equation.html
 import scipy as sp
 import time
 from mpl_toolkits.mplot3d import Axes3D
@@ -8,25 +9,28 @@ import matplotlib.pyplot as plt
 import mpl_toolkits.mplot3d.axes3d as p3
 import matplotlib.animation as animation
 
-
-start_time = time.time()
-
+# how far each data point should be apart
 dx=0.01
 dy=0.01
+
+# is this the D term in diffusion equation?
 a=0.5
-numframes=50
-t=0.
+
+# number of frames (time steps) to render
+numframes=20
+# t=0.
 
 # number of x and y data points
 nx = int(1/dx)
 ny = int(1/dy)
 
+# ???
 dx2=dx**2
 dy2=dy**2
-
 dt = dx2*dy2/( 2*a*(dx2+dy2) )
 
-ui = sp.zeros([nx,ny]) # initial values?
+# initial values
+ui = sp.zeros([nx,ny])
 u = sp.zeros([nx,ny])
 
 for i in range(nx):
@@ -35,9 +39,7 @@ for i in range(nx):
    & ((i*dx-0.5)**2+(j*dy-0.5)**2>=.05) ):
     ui[i,j] = 1
 
-print(f'Time after initializing: {time.time() - start_time}')
-
-# this is probably where the diff eq is
+# the diff eq
 def evolve_ts(u, ui):
  u[1:-1, 1:-1] = ui[1:-1, 1:-1] + a*dt*(
                 (ui[2:, 1:-1] - 2*ui[1:-1, 1:-1] + ui[:-2, 1:-1])/dx2 +
